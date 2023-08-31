@@ -14,7 +14,7 @@ const styleLi = {
     alignItems: 'center',
     marginBottom: '10px',
     gap: '10px',
-    borderBottom: '2px solid #000',
+    borderBottom: '2px solid black',
 };
 
 const styleCheckbox = {
