@@ -21,6 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set git user
+        run: |
+          git config user.name "sergiyZinovyev"
+          git config user.email "thrion1@gmail.com"  
+
       - name: Build and deploy
         run: |
           npm run build
