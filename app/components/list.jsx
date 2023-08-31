@@ -13,7 +13,7 @@ const styleLi = {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '10px',
-    gap: '10px',
+    gap: '11px',
     borderBottom: '2px solid black',
 };
 
