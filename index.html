@@ -10,19 +10,25 @@
             background-color: rgb(4, 25, 44);
             color: white;
             font-family: Arial, sans-serif;
-            font-size: 16px; /* Базовый размер шрифта для html */
+            font-size: 16px;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
         }
-
-        /* Ваши медиа-запросы */
+        body {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
         @media (max-width: 768px) {
             html {
-                font-size: 18px; /* Увеличьте размер шрифта для мобильных устройств */
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div id="app"></div>
-    <script src="public/bundle.js"></script>
+    <script src="/public/bundle.js"></script>
 </body>
 </html>

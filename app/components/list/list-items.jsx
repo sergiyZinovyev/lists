@@ -1,8 +1,6 @@
 const React = require("react");
-const styles = require("./list.module.css");
 const { IconButton } = require('@mui/material');
 const { Checkbox  } = require('@mui/material');
-const DeleteIcon = require('@mui/icons-material/Delete').default;
 const HighlightOffIcon = require('@mui/icons-material/HighlightOff').default;
 
 const styleList = {
@@ -29,7 +27,7 @@ const styleText = {
     fontSize: '24px'
 };
 
-function List(props) {
+function ListItems(props) {
 
     function remove(index) {
         props.onRemoveItem(index);
@@ -60,4 +58,4 @@ function List(props) {
     return <div style={styleList}>{items}</div>;
 }
   
-module.exports = List;
+module.exports = ListItems;
