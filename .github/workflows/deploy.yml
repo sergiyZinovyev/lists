@@ -23,8 +23,8 @@ jobs:
 
       - name: Set git user
         run: |
-          git config user.name "sergiyZinovyev"
-          git config user.email "thrion1@gmail.com"  
+          git config --global user.name "sergiyZinovyev"
+          git config --global user.email "thrion1@gmail.com" 
 
       - name: Build and deploy
         run: |
