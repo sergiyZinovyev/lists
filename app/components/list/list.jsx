@@ -73,7 +73,7 @@ function List() {
                 value={newItem}
                 style={styleInput}
                 onChange={handleInputChange}
-                placeholder="Add new element"
+                placeholder="Add new list element"
             />
             <Button variant="contained" style={styleBtn} onClick={handleAddItem}>Add</Button>
             {loading ? (
