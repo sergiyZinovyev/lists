@@ -29,4 +29,4 @@ jobs:
       - name: Build and deploy
         run: |
           npm run build
-          npx gh-pages -d public
+          npx gh-pages -d build
