@@ -5,16 +5,46 @@ const Dialog = require('@mui/material/Dialog').default;
 const DialogActions = require('@mui/material/DialogActions').default;
 const DialogContent = require('@mui/material/DialogContent').default;
 const DialogTitle = require('@mui/material/DialogTitle').default;
-const Autocomplete = require('@mui/material/Autocomplete').default;
+const InputLabel = require('@mui/material/InputLabel').default;
+const MenuItem = require('@mui/material/MenuItem').default;
+const FormControl = require('@mui/material/FormControl').default;
+const Select = require('@mui/material/Select').default;
+const { styled } = require('@mui/material');
 
 const styleDialog = {
     backgroundColor: '#112D45',
     color: 'white'
 };
+  
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+    color: 'white',
+    '&.Mui-selected': {
+        backgroundColor: '#112D45',
+        color: 'white',
+    },
+}));
 
-const top100Films = [
-    'grocery',
-    'The Godfather',
+const listType = [
+    {
+        id: 1,
+        name: 'grocery',
+    },
+    {
+        id: 2,
+        name: 'clothes',
+    },
+    {
+        id: 3,
+        name: 'technique',
+    },
+    {
+        id: 4,
+        name: 'others',
+    },
+    {
+        id: 5,
+        name: 'tasks',
+    },
 ]
 
 function ListDialog(props){
@@ -67,32 +97,46 @@ function ListDialog(props){
                         style: { color: 'white' },
                     }}
                 />
-                {/* <TextField
-                    margin="dense"
-                    id="type"
-                    label="List type"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    InputProps={{
-                        style: { color: 'white' },
-                    }}
-                /> */}
-                {/* <Autocomplete
-                    disablePortal
-                    id="combo-box"
-                    options={top100Films}
-                    defaultValue={type}
-                    renderInput={(params) => <TextField 
-                        {...params} 
-                        margin="dense"
-                        label="List type" 
-                        variant="standard"
-                        onChange={(e) => setType(e.target.value)}
-                    />}
-                /> */}
+                <FormControl 
+                    fullWidth 
+                    variant="standard" 
+                    margin="dense" 
+                >
+                    <InputLabel 
+                        id="demo-simple-select-label"
+                    >
+                        List type
+                    </InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={type}
+                        label="type"
+                        onChange={(event) => {
+                            setType(event.target.value);
+                        }}
+                        style={{
+                            color: 'white'
+                        }}
+                        MenuProps={{
+                            PaperProps: {
+                              style: {
+                                backgroundColor: 'black',
+                                color: 'white',
+                              },
+                            },
+                        }}
+                    >
+                        {listType.map((item) => (
+                            <StyledMenuItem 
+                                key={item.id} 
+                                value={item.name}
+                            >
+                                {item.name}
+                            </StyledMenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>

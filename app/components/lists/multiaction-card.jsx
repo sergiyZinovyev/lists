@@ -21,8 +21,7 @@ function MultiActionAreaCard(props) {
       <CardActionArea component={Link} to={`/list/${encodeURIComponent(props.card.id)}`}>
         <CardMedia
           component="img"
-          height="140"
-          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          style={{ objectFit: 'cover', width: '100%', height: '200px' }}
           image={`assets/${props.card.type}.png`}
           alt={props.card.type}
         />

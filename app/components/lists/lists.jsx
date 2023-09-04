@@ -1,6 +1,7 @@
 const React = require('react');
 const MultiActionAreaCard = require('./multiaction-card.jsx');
 const ListDialog = require('./list-dialog.jsx');
+const { useNavigate } = require('react-router-dom');
 const { 
     Box, 
     LinearProgress,
@@ -8,9 +9,10 @@ const {
     SpeedDialAction,
     SpeedDial,
 } = require('@mui/material');
+const { fontWeight } = require('@mui/system');
 
 const SpeedDialIcon = require('@mui/material/SpeedDialIcon').default;
-const FileCopyIcon = require('@mui/icons-material/FileCopyOutlined').default;
+const AddCircleIcon = require('@mui/icons-material/AddCircle').default;
 const SaveIcon = require('@mui/icons-material/Save').default;
 const PrintIcon = require('@mui/icons-material/Print').default;
 const ShareIcon = require('@mui/icons-material/Share').default;
@@ -45,6 +47,18 @@ const styleBox = {
     marginTop: '10px',
 };
 
+const styleNotFound = {
+    marginTop: '100px',
+    height: '100%',
+    width: '100%',
+    color: 'white',
+    opacity: '0.1',
+    fontSize: '50px',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
+};
+
 const lists = [
     {
         id: 12345,
@@ -72,6 +86,8 @@ function Lists(){
     const [loading, setLoading] = React.useState(true);
     const [cards, setCards] = React.useState([]);
 
+    const navigate = useNavigate();
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -96,6 +112,7 @@ function Lists(){
         const newCards = [data, ...cards];
         setCards(newCards);
         localStorage.setItem('AllLists', JSON.stringify(newCards));
+        navigate(`/list/${encodeURIComponent(data.id)}`);
     };
 
     const removeList = (index) => {
@@ -106,11 +123,28 @@ function Lists(){
         localStorage.removeItem(removedKey);
     };
 
-    const items = cards.map((item, index) => (
-        <StyleCard key={index}>
-             <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
-        </StyleCard>
-    ));
+    // const items = cards.map((item, index) => (
+    //         <StyleCard key={index}>
+    //             <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
+    //         </StyleCard>
+    //     )
+    // );
+
+    function items() {
+        console.log('cards: ', cards);
+        if (cards && cards.length > 0) {
+            return cards.map((item, index) => (
+                <StyleCard key={index}>
+                    <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
+                </StyleCard>
+            )) 
+        } else {
+            return (
+                <div style={styleNotFound}>Click <AddCircleIcon style={{ fontSize: 55, verticalAlign: 'middle' }} /> below and create your first list</div>
+            )
+        }
+        
+    }
 
     return (
         <div>
@@ -119,7 +153,7 @@ function Lists(){
                     <LinearProgress />
                 </Box>
             ) : (
-                <StyleCards>{items}</StyleCards>
+                <StyleCards>{items()}</StyleCards>
             )}
             <Box 
                 sx={{ 

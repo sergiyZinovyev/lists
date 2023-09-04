@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - master  # Ваша ветка
+      - master
 
 jobs:
   deploy:
@@ -29,5 +29,4 @@ jobs:
       - name: Build and deploy
         run: |
           npm run build
-          git remote set-url origin https://github.com/sergiyZinovyev/lists.git
           npx gh-pages -d build

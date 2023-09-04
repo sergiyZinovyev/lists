@@ -1,6 +1,7 @@
 const React = require("react");
-const { Button, Box, LinearProgress } = require('@mui/material');
+const { Button, Box, LinearProgress, IconButton } = require('@mui/material');
 const ListItems = require("./list-items.jsx");
+const AddCircleIcon = require('@mui/icons-material/AddCircle').default;
 
 const styleBtn = {
     marginLeft: '10px',
@@ -12,8 +13,21 @@ const styleBox = {
 };
 
 const styleInput = {
-    marginTop: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '60px',
     marginLeft: '20px',
+    marginRight: '20px'
+};
+
+const styleInputElement = {
+    flex: '1',
+    backgroundColor: '#04192C',
+    color: 'white',
+    border: '1px solid #1976D2',
+    borderRadius: '4px',
+    paddingLeft: '8px',
+    height: '30px'
 };
 
 function List() {
@@ -68,14 +82,19 @@ function List() {
 
     return (
         <div>
-            <input
-                type="text"
-                value={newItem}
-                style={styleInput}
-                onChange={handleInputChange}
-                placeholder="Add new list element"
-            />
-            <Button variant="contained" style={styleBtn} onClick={handleAddItem}>Add</Button>
+            <div style={styleInput}>
+                <input
+                    type="text"
+                    value={newItem}
+                    style={styleInputElement}
+                    onChange={handleInputChange}
+                    placeholder="Add new list element"
+                />
+                <IconButton aria-label="add" color='primary' onClick={handleAddItem}>
+                    <AddCircleIcon />
+                </IconButton>
+            </div>
+            
             {loading ? (
                 <Box style={styleBox} sx={{ width: '100%' }}>
                     <LinearProgress />
