@@ -52,7 +52,7 @@ function Navbar(props) {
         const lastSegment = urlParts[urlParts.length - 1];
 
         const data = JSON.parse(localStorage.getItem('AllLists'));
-        const listName = data.find(el => el.id === Number(lastSegment))?.name;
+        const listName = data?.find(el => el.id === Number(lastSegment))?.name;
         if (listName) {
             setListName(listName);
         } else setListName('');

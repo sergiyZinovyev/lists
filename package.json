@@ -1,6 +1,7 @@
 {
   "name": "searchapp",
   "description": "A React.js project using Webpack",
+  "homepage": "https://sergiyzinovyev.github.io/lists/#",
   "version": "1.0.0",
   "author": "serg",
   "scripts": {

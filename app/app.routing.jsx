@@ -1,5 +1,5 @@
 const React = require("react");
-const { BrowserRouter: Router, Route, Routes } = require('react-router-dom');
+const { BrowserRouter: Router, Route, Routes, HashRouter } = require('react-router-dom');
 const List = require("./components/list/list.jsx");
 const Lists = require("./components/lists/lists.jsx");
 const Navbar = require("./components/navbar/navbar.jsx");
@@ -7,7 +7,7 @@ const Navbar = require("./components/navbar/navbar.jsx");
 function Routing() { 
 
     return (
-        <Router>
+        <HashRouter>
             <div>
                 <Navbar />
                 <Routes>
@@ -17,7 +17,7 @@ function Routing() {
                     <Route path="*" element={(<h2>Not found</h2>)} />
                 </Routes>
             </div>
-        </Router>
+        </HashRouter>
     )
 }
 
