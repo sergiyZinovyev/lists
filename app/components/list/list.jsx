@@ -1,12 +1,8 @@
 const React = require("react");
-const { Button, Box, LinearProgress, IconButton } = require('@mui/material');
+const { Box, LinearProgress, IconButton, Zoom } = require('@mui/material');
 const ListItems = require("./list-items.jsx");
 const AddCircleIcon = require('@mui/icons-material/AddCircle').default;
-
-const styleBtn = {
-    marginLeft: '10px',
-    fontWeight: 'bold'
-};
+const { useTheme } = require('../../theme-context.jsx');
 
 const styleBox = {
     marginTop: '10px',
@@ -24,19 +20,20 @@ const styleInputElement = {
     flex: '1',
     backgroundColor: '#04192C',
     color: 'white',
-    border: '1px solid #1976D2',
+    border: '2px solid #1976D2',
     borderRadius: '4px',
     paddingLeft: '8px',
-    height: '30px'
+    height: '30px',
+    fontSize: '1rem'
 };
 
 function List() {
 
+    const { getColor } = useTheme();
+
     const currentURL = window.location.href;
     const urlParts = currentURL.split('/');
     const lastSegment = urlParts[urlParts.length - 1];
-
-    console.log('Последний элемент из URL:', lastSegment);
 
     const [list, setList] = React.useState([]);
 
@@ -82,22 +79,28 @@ function List() {
 
     return (
         <div>
-            <div style={styleInput}>
-                <input
-                    type="text"
-                    value={newItem}
-                    style={styleInputElement}
-                    onChange={handleInputChange}
-                    placeholder="Add new list element"
-                />
-                <IconButton aria-label="add" color='primary' onClick={handleAddItem}>
-                    <AddCircleIcon />
-                </IconButton>
-            </div>
-            
+            <Zoom in={true} timeout={500}>
+                <div style={styleInput}>
+                    <input
+                        type="text"
+                        value={newItem}
+                        style={{
+                            ...styleInputElement,
+                            backgroundColor: getColor('background'),
+                            color: getColor('text'),
+                            borderColor: getColor('listtext')
+                        }}
+                        onChange={handleInputChange}
+                        placeholder="Add new list element"
+                    />
+                    <IconButton aria-label="add" style={{color: getColor('listtext')}} onClick={handleAddItem}>
+                        <AddCircleIcon />
+                    </IconButton>
+                </div>
+            </Zoom>
             {loading ? (
                 <Box style={styleBox} sx={{ width: '100%' }}>
-                    <LinearProgress />
+                    <LinearProgress color={getColor('muiTheme')} />
                 </Box>
             ) : (
                 <ListItems list={list} onRemoveItem={handleRemoveItem} onUpdateList={updateList}/>

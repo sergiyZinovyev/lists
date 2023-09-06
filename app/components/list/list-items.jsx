@@ -1,7 +1,10 @@
 const React = require("react");
 const { IconButton } = require('@mui/material');
 const { Checkbox  } = require('@mui/material');
+const { Slide } = require('@mui/material');
 const HighlightOffIcon = require('@mui/icons-material/HighlightOff').default;
+const { useTheme } = require('@mui/material/styles');
+const { useTheme: useCustomTheme } = require('../../theme-context.jsx');
 
 const styleList = {
     margin: '20px'
@@ -12,7 +15,7 @@ const styleLi = {
     alignItems: 'center',
     marginBottom: '10px',
     gap: '11px',
-    borderBottom: '2px solid black',
+    borderBottom: '1px solid black',
 };
 
 const styleCheckbox = {
@@ -28,6 +31,8 @@ const styleText = {
 };
 
 function ListItems(props) {
+    const theme = useTheme();
+    const { getColor } = useCustomTheme();
 
     function remove(index) {
         props.onRemoveItem(index);
@@ -38,21 +43,44 @@ function ListItems(props) {
     }
 
     const items = props.list.map((item, index) => (
-        <div style={styleLi} key={index}>
-            <Checkbox 
-                style={styleCheckbox}
-                type="checkbox"
-                checked={item.complete}
-                onChange={() => update(index)}
-            />
-            <span 
-                style={{ ...styleText, textDecoration: item.complete ? 'line-through' : 'none' }}
-                onClick={() => update(index)}
-            >{item.name}</span>
-            <IconButton aria-label="delete" color='error' onClick={(event) => { event.stopPropagation(); remove(index); }} style={{ marginLeft: 'auto' }}>
-                <HighlightOffIcon />
-            </IconButton>
-        </div>
+        <Slide 
+            key={index}
+            direction="up" 
+            in={true}
+            timeout={100 + index*100}
+            easing={{
+                enter: theme.transitions.easing.sharp,
+                exit: theme.transitions.easing.easeOut,
+            }}
+        >
+            <div 
+                style={{
+                    ...styleLi,
+                    borderColor: getColor('listborder')
+                }}
+            >
+                <Checkbox 
+                    style={{
+                        ...styleCheckbox,
+                        color: getColor('listtext')
+                    }}
+                    type="checkbox"
+                    checked={item.complete}
+                    onChange={() => update(index)}
+                />
+                <span 
+                    style={{ 
+                        ...styleText, 
+                        color: getColor('listtext'),
+                        textDecoration: item.complete ? 'line-through' : 'none' 
+                    }}
+                    onClick={() => update(index)}
+                >{item.name}</span>
+                <IconButton aria-label="delete" color='error' onClick={(event) => { event.stopPropagation(); remove(index); }} style={{ marginLeft: 'auto' }}>
+                    <HighlightOffIcon />
+                </IconButton>
+            </div>
+        </Slide>
     ));
 
     return <div style={styleList}>{items}</div>;

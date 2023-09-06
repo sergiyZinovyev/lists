@@ -6,17 +6,20 @@ const {
     Box, 
     LinearProgress,
     styled,
-    SpeedDialAction,
     SpeedDial,
+    Slide
 } = require('@mui/material');
-const { fontWeight } = require('@mui/system');
 
+const { useTheme } = require('@mui/material/styles');
+const { useTheme: useCustomTheme } = require('../../theme-context.jsx');
 const SpeedDialIcon = require('@mui/material/SpeedDialIcon').default;
 const AddCircleIcon = require('@mui/icons-material/AddCircle').default;
 const SaveIcon = require('@mui/icons-material/Save').default;
 const PrintIcon = require('@mui/icons-material/Print').default;
 const ShareIcon = require('@mui/icons-material/Share').default;
 const EditIcon = require('@mui/icons-material/Edit').default;
+
+
 
 const StyleCard = styled('div')({
     flex: '1',
@@ -82,11 +85,14 @@ const lists = [
 
 function Lists(){
 
+    const { getColor } = useCustomTheme();
+
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [cards, setCards] = React.useState([]);
 
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -103,7 +109,7 @@ function Lists(){
                 setCards(data);
             }
             setLoading(false);
-        }, 1000);
+        }, 500);
     }, []);
 
     const addList = (data) => {
@@ -123,24 +129,33 @@ function Lists(){
         localStorage.removeItem(removedKey);
     };
 
-    // const items = cards.map((item, index) => (
-    //         <StyleCard key={index}>
-    //             <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
-    //         </StyleCard>
-    //     )
-    // );
-
     function items() {
         console.log('cards: ', cards);
         if (cards && cards.length > 0) {
             return cards.map((item, index) => (
-                <StyleCard key={index}>
-                    <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
-                </StyleCard>
+                <Slide 
+                    key={index}
+                    direction="up" 
+                    in={!loading}
+                    timeout={350}
+                    easing={{
+                        enter: theme.transitions.easing.sharp,
+                        exit: theme.transitions.easing.easeOut,
+                    }}
+                >
+                    <StyleCard>
+                        <MultiActionAreaCard card={item} onRemove={() => { removeList(index) }}/>
+                    </StyleCard>
+                </Slide>
             )) 
         } else {
             return (
-                <div style={styleNotFound}>Click <AddCircleIcon style={{ fontSize: 55, verticalAlign: 'middle' }} /> below and create your first list</div>
+                <div style={{
+                    ...styleNotFound,
+                    color: getColor('text')
+                }}>
+                    Click <AddCircleIcon style={{ fontSize: 55, verticalAlign: 'middle' }} /> below and create your first list
+                </div>
             )
         }
         
@@ -150,7 +165,7 @@ function Lists(){
         <div>
             {loading ? (
                 <Box style={styleBox} sx={{ width: '100%' }}>
-                    <LinearProgress />
+                    <LinearProgress color={getColor('muiTheme')} />
                 </Box>
             ) : (
                 <StyleCards>{items()}</StyleCards>
@@ -169,18 +184,19 @@ function Lists(){
                     sx={{ 
                         position: 'absolute', 
                         bottom: 16, 
-                        right: 16 
+                        right: 16,
+                    }}
+                    FabProps={{
+                        sx: {
+                          bgcolor: getColor('listtext'),
+                          '&:hover': {
+                            bgcolor: getColor('listtext'),
+                          }
+                        }
                     }}
                     icon={<SpeedDialIcon openIcon={<EditIcon />} />}
                     onClick={handleClickOpen}
                 >
-                    {/* {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                    />
-                    ))} */}
                 </SpeedDial>
             </Box>
             <ListDialog open={open} onClose={handleClose} onAdd={(data) => { addList(data) }} />

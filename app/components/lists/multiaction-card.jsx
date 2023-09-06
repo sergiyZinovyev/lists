@@ -8,8 +8,11 @@ const CardActionArea = require('@mui/material/CardActionArea').default;
 const CardActions = require('@mui/material/CardActions').default;
 const DeleteForeverIcon = require('@mui/icons-material/DeleteForever').default;
 const { Link } = require('react-router-dom');
+const { useTheme } = require('../../theme-context.jsx');
 
 function MultiActionAreaCard(props) {
+
+  const { getColor } = useTheme();
 
   function remove() {
       console.log('remove')
@@ -17,7 +20,12 @@ function MultiActionAreaCard(props) {
   }
 
   return (
-    <Card sx={{ backgroundColor: '#07243D', color: 'white' }}>
+    <Card sx={{ 
+      backgroundColor: getColor('foreground'), 
+      color: getColor('text'),
+      borderRadius: '10px',
+      boxShadow: 'none',
+    }}>
       <CardActionArea component={Link} to={`/list/${encodeURIComponent(props.card.id)}`}>
         <CardMedia
           component="img"
@@ -25,17 +33,19 @@ function MultiActionAreaCard(props) {
           image={`assets/${props.card.type}.png`}
           alt={props.card.type}
         />
-        <CardContent sx={{ backgroundColor: '#07243D' }}>
-          <Typography gutterBottom variant="h5" component="div" sx={{ color: 'white' }}>
+        <CardContent sx={{ 
+          backgroundColor: getColor('foreground'),
+        }}>
+          <Typography gutterBottom variant="h5" component="div" sx={{ color: getColor('text') }}>
             {props.card.name}
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" >
             {props.card.describe}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ backgroundColor: '#07243D' }}>
-        <IconButton aria-label="delete" color='primary' onClick={remove}>
+      <CardActions sx={{ backgroundColor: getColor('foreground') }}>
+        <IconButton aria-label="delete" style={{color: getColor('listtext')}} onClick={remove}>
             <DeleteForeverIcon />
         </IconButton>
       </CardActions>

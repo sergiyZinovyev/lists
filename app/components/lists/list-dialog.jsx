@@ -9,20 +9,13 @@ const InputLabel = require('@mui/material/InputLabel').default;
 const MenuItem = require('@mui/material/MenuItem').default;
 const FormControl = require('@mui/material/FormControl').default;
 const Select = require('@mui/material/Select').default;
-const { styled } = require('@mui/material');
+const { useTheme } = require('../../theme-context.jsx');
 
 const styleDialog = {
+    width: '85%',
     backgroundColor: '#112D45',
     color: 'white'
 };
-  
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-    color: 'white',
-    '&.Mui-selected': {
-        backgroundColor: '#112D45',
-        color: 'white',
-    },
-}));
 
 const listType = [
     {
@@ -48,6 +41,9 @@ const listType = [
 ]
 
 function ListDialog(props){
+    
+    const { getColor, switchTheme } = useTheme();
+
     const [name, setName] = React.useState('');
     const [describe, setDescribe] = React.useState('');
     const [type, setType] = React.useState('grocery');
@@ -67,7 +63,17 @@ function ListDialog(props){
     };
 
     return (
-        <Dialog open={props.open} onClose={handleClose} PaperProps={{ style: styleDialog }}>
+        <Dialog 
+            open={props.open} 
+            onClose={handleClose} 
+            PaperProps={{ 
+                style: {
+                    ...styleDialog, 
+                    backgroundColor: getColor('foreground'),
+                    color: getColor('text')
+                }
+            }}
+        >
             <DialogTitle>Add new list</DialogTitle>
             <DialogContent>
                 <TextField
@@ -80,8 +86,9 @@ function ListDialog(props){
                     variant="standard"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    color={getColor('muiTheme')}
                     InputProps={{
-                        style: { color: 'white' },
+                        style: { color: getColor('text') },
                     }}
                 />
                 <TextField
@@ -93,14 +100,16 @@ function ListDialog(props){
                     variant="standard"
                     value={describe}
                     onChange={(e) => setDescribe(e.target.value)}
+                    color={getColor('muiTheme')}
                     InputProps={{
-                        style: { color: 'white' },
+                        style: { color: getColor('text') },
                     }}
                 />
                 <FormControl 
                     fullWidth 
                     variant="standard" 
-                    margin="dense" 
+                    margin="dense"
+                    color={getColor('muiTheme')} 
                 >
                     <InputLabel 
                         id="demo-simple-select-label"
@@ -116,31 +125,38 @@ function ListDialog(props){
                             setType(event.target.value);
                         }}
                         style={{
-                            color: 'white'
+                            color: getColor('text')
                         }}
                         MenuProps={{
                             PaperProps: {
                               style: {
-                                backgroundColor: 'black',
-                                color: 'white',
+                                backgroundColor: getColor('menuground') || 'black',
+                                color: getColor('text') || 'white',
                               },
                             },
                         }}
                     >
                         {listType.map((item) => (
-                            <StyledMenuItem 
+                            <MenuItem 
+                                sx={{
+                                    color: getColor('text') || 'white',
+                                    '&.Mui-selected': {
+                                        backgroundColor: getColor('selected') || '#112D45',
+                                        color: getColor('text') || 'white',
+                                    },
+                                }}
                                 key={item.id} 
                                 value={item.name}
                             >
                                 {item.name}
-                            </StyledMenuItem>
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={add}>Add</Button>
+                <Button onClick={handleClose} style={{color: getColor('listtext')}}>Cancel</Button>
+                <Button onClick={add} style={{color: getColor('listtext')}}>Add</Button>
             </DialogActions>
         </Dialog>
     )

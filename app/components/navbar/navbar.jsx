@@ -2,7 +2,13 @@ const React = require("react");
 const { IconButton } = require('@mui/material');
 const HomeIcon = require('@mui/icons-material/Home').default;
 const MoreVertIcon = require('@mui/icons-material/MoreVert').default;
+const { 
+    Menu, 
+    MenuItem,
+} = require('@mui/material');
 const { Link, useLocation } = require('react-router-dom');
+
+const { useTheme } = require('../../theme-context.jsx');
 
 const styleNavbar = {
     display: 'flex',
@@ -42,7 +48,39 @@ const styleHome = {
 };
 
 function Navbar(props) { 
+    const { getColor, switchTheme } = useTheme();
+
     const location = useLocation();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDarkTheme = () => {
+        setAnchorEl(null);
+        switchTheme('dark');
+    };
+
+    const handleLightTheme = () => {
+        setAnchorEl(null);
+        switchTheme('light');
+    };
+
+    const handlePurpleTheme = () => {
+        setAnchorEl(null);
+        switchTheme('dark purple');
+    };
+
+    const handleContrastTheme = () => {
+        setAnchorEl(null);
+        switchTheme('high contrast');
+    };
 
     const [listName, setListName] = React.useState('');
 
@@ -60,18 +98,46 @@ function Navbar(props) {
 
     return (
         <div>
-            <div style={styleNavbar}>
-                <IconButton style={styleHome} component={Link} to="/lists">
+            <div style={{...styleNavbar, backgroundColor: getColor('foreground')}}>
+                <IconButton 
+                    style={{...styleHome, color: getColor('text')}}
+                    component={Link} to="/lists"
+                >
                     <HomeIcon />
                 </IconButton>
                 <div style={styleCenter}>
-                    <span style={styleCenterText}>
+                    <span style={{...styleCenterText, color: getColor('text')}}>
                         {listName}
                     </span>
                 </div>
-                <IconButton style={styleHome} component={Link} to="/lists">
+                <IconButton 
+                    style={{...styleHome, color: getColor('text')}}
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                >
                     <MoreVertIcon />
                 </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{ style: {
+                        backgroundColor: getColor('menuground'),
+                        color: getColor('text'),
+                      } }}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleDarkTheme}>Dark</MenuItem>
+                    <MenuItem onClick={handlePurpleTheme}>Dark Purple</MenuItem>
+                    <MenuItem onClick={handleLightTheme}>Light</MenuItem>
+                    <MenuItem onClick={handleContrastTheme}>High Contrast</MenuItem>
+                </Menu>
             </div>
             <div style={styleNavbarBottom}></div>
         </div>
