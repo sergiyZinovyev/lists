@@ -7,7 +7,11 @@ const { useTheme } = require('@mui/material/styles');
 const { useTheme: useCustomTheme } = require('../../theme-context.jsx');
 
 const styleList = {
-    margin: '20px'
+    margin: '20px',
+    position: 'relative',
+    zIndex: 1,
+    minHeight: 'calc(100vh - 150px)',
+    overflow: 'hidden'
 };
 
 const styleLi = {
@@ -34,20 +38,53 @@ function ListItems(props) {
     const theme = useTheme();
     const { getColor } = useCustomTheme();
 
+    const animationTime = 700;
+    const animationCoef = 0.1;
+    const animationDelay = animationTime * animationCoef;
+
+    const [newItems, setNewItems] = React.useState([]);
+
+    React.useEffect(() => {   
+        let time = 0;
+        if(newItems.length === 0) {
+            props.list.forEach((el, index) => {
+                time = index * animationDelay;
+                setTimeout(() => {
+                    setItem(el);
+                }, time);
+            })
+        } else if(props.list.length > newItems.length) {
+            setItem(props.list[props.list.length - 1]);
+        } else if(props.list.length < newItems.length) {}
+        
+    }, [props.list]);
+
+    function setItem(el) {
+        setNewItems(prevItems => {
+            const nextItems = [...prevItems, el];
+            return nextItems;
+        });
+    }
+
     function remove(index) {
         props.onRemoveItem(index);
+        setNewItems(prevItems => {
+            const newList = prevItems.filter((el, i) => el.id !== index);
+            return newList;
+        });
     }
 
     function update(index) {
         props.onUpdateList(index);
     }
 
-    const items = props.list.map((item, index) => (
+    const items = newItems.map((item, index, arr) => (    
         <Slide 
             key={index}
             direction="up" 
             in={true}
-            timeout={100 + index*100}
+            mountOnEnter
+            timeout={animationTime - index*(animationTime/arr.length)*animationCoef}
             easing={{
                 enter: theme.transitions.easing.sharp,
                 exit: theme.transitions.easing.easeOut,
@@ -66,7 +103,7 @@ function ListItems(props) {
                     }}
                     type="checkbox"
                     checked={item.complete}
-                    onChange={() => update(index)}
+                    onChange={() => update(item.id)}
                 />
                 <span 
                     style={{ 
@@ -74,9 +111,17 @@ function ListItems(props) {
                         color: getColor('listtext'),
                         textDecoration: item.complete ? 'line-through' : 'none' 
                     }}
-                    onClick={() => update(index)}
+                    onClick={() => update(item.id)}
                 >{item.name}</span>
-                <IconButton aria-label="delete" color='error' onClick={(event) => { event.stopPropagation(); remove(index); }} style={{ marginLeft: 'auto' }}>
+                <IconButton 
+                    aria-label="delete" 
+                    color='error' 
+                    onClick={(event) => { 
+                        event.stopPropagation(); 
+                        remove(item.id); 
+                    }} 
+                    style={{ marginLeft: 'auto' }}
+                >
                     <HighlightOffIcon />
                 </IconButton>
             </div>

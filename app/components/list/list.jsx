@@ -33,7 +33,7 @@ function List() {
 
     const currentURL = window.location.href;
     const urlParts = currentURL.split('/');
-    const lastSegment = urlParts[urlParts.length - 1];
+    const listId = urlParts[urlParts.length - 1];
 
     const [list, setList] = React.useState([]);
 
@@ -43,7 +43,7 @@ function List() {
 
     React.useEffect(() => { 
         setTimeout(() => {
-            const data = JSON.parse(localStorage.getItem(lastSegment));
+            const data = JSON.parse(localStorage.getItem(listId));
             if (data !== null) {
                 setList(data);
             }
@@ -58,23 +58,30 @@ function List() {
 
     function handleAddItem () {
         if (newItem.trim() !== "") {
-            setList([...list, {name: newItem, complete: false}]);
-            localStorage.setItem(lastSegment, JSON.stringify([...list, {name: newItem, complete: false}]));
+            const newElement = {
+                id: Date.now(),
+                name: newItem, 
+                complete: false,
+            };
+            const newList = [...list, newElement];
+            setList(newList);
+            localStorage.setItem(listId, JSON.stringify(newList));
             setNewItem("");
         }
     };
 
     function handleRemoveItem (index) {
-        const newList = list.filter((_, i) => i !== index);
+        const newList = list.filter((el, i) => el.id !== index);
         setList(newList);
-        localStorage.setItem(lastSegment, JSON.stringify(newList));
+        localStorage.setItem(listId, JSON.stringify(newList));
     };
 
     function updateList(index) {
         const updatedList = [...list];
-        updatedList[index].complete = !updatedList[index].complete;
+        const updatedElement = updatedList.find(el => el.id === index);
+        updatedElement.complete = !updatedElement.complete;
         setList(updatedList);
-        localStorage.setItem(lastSegment, JSON.stringify(updatedList));
+        localStorage.setItem(listId, JSON.stringify(updatedList));
     }
 
     return (
