@@ -8,8 +8,10 @@ const DialogTitle = require('@mui/material/DialogTitle').default;
 const InputLabel = require('@mui/material/InputLabel').default;
 const MenuItem = require('@mui/material/MenuItem').default;
 const FormControl = require('@mui/material/FormControl').default;
+const ListItemText = require('@mui/material/ListItemText').default;
 const Select = require('@mui/material/Select').default;
 const { useTheme } = require('../../theme-context.jsx');
+const MaterialIcons = require('../icons/material-icons.jsx');
 
 const styleDialog = {
     width: '85%',
@@ -125,7 +127,7 @@ function ListDialog(props){
                             setType(event.target.value);
                         }}
                         style={{
-                            color: getColor('text')
+                            color: getColor('text'),
                         }}
                         MenuProps={{
                             PaperProps: {
@@ -148,7 +150,19 @@ function ListDialog(props){
                                 key={item.id} 
                                 value={item.name}
                             >
-                                {item.name}
+                                <div style={{ 
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    color: getColor('text'),
+                                }}>
+                                    <MaterialIcons 
+                                        size={24} 
+                                        color={getColor('text')}
+                                        data={item.name}
+                                    />
+                                    <ListItemText>{item.name}</ListItemText>
+                                </div>
                             </MenuItem>
                         ))}
                     </Select>

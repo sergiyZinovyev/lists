@@ -10,6 +10,8 @@ const { Link, useLocation } = require('react-router-dom');
 
 const { useTheme } = require('../../theme-context.jsx');
 
+const MaterialIcons = require('../icons/material-icons.jsx');
+
 const styleNavbar = {
     display: 'flex',
     alignItems: 'center',
@@ -31,6 +33,11 @@ const styleCenter = {
     whiteSpace: 'nowrap',
     position: 'relative',
     textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    opacity: '0.7',
 };
 
 const styleCenterText = {
@@ -83,6 +90,7 @@ function Navbar(props) {
     };
 
     const [listName, setListName] = React.useState('');
+    const [listType, setListType] = React.useState('');
 
     React.useEffect(() => { 
         const currentURL = location.pathname;
@@ -91,9 +99,13 @@ function Navbar(props) {
 
         const data = JSON.parse(localStorage.getItem('AllLists'));
         const listName = data?.find(el => el.id === Number(lastSegment))?.name;
+        const listType = data?.find(el => el.id === Number(lastSegment))?.type;
         if (listName) {
             setListName(listName);
         } else setListName('');
+        if (listType) {
+            setListType(listType);
+        } else setListType('');
     }, [location.pathname]);
 
     return (
@@ -106,6 +118,11 @@ function Navbar(props) {
                     <HomeIcon />
                 </IconButton>
                 <div style={styleCenter}>
+                    {listType ? <MaterialIcons 
+                        size={20} 
+                        color={getColor('text')}
+                        data={listType}
+                    /> : null}
                     <span style={{...styleCenterText, color: getColor('text')}}>
                         {listName}
                     </span>
