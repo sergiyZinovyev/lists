@@ -12,7 +12,7 @@ const { useTheme } = require('../../theme-context.jsx');
 
 function MultiActionAreaCard(props) {
 
-  const { getColor } = useTheme();
+  const { getColor, theme } = useTheme();
 
   function remove() {
       console.log('remove')
@@ -30,7 +30,7 @@ function MultiActionAreaCard(props) {
         <CardMedia
           component="img"
           style={{ objectFit: 'cover', width: '100%', height: '200px' }}
-          image={`assets/${props.card.type}.png`}
+          image={`assets/img/${theme.pathName}/${props.card.type}.png`}
           alt={props.card.type}
         />
         <CardContent sx={{ 

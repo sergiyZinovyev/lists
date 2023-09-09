@@ -46,10 +46,26 @@ const highContrast = {
 };
 
 const themeMappings = {
-  'light': light,
-  'dark': dark,
-  'dark purple': darkPurple,
-  'high contrast': highContrast
+  'dark': {
+    name: 'dark',
+    pathName: 'dark',
+    cssData: dark
+  },
+  'light': {
+    name: 'light',
+    pathName: 'light',
+    cssData: light
+  },
+  'dark purple': {
+    name: 'dark purple',
+    pathName: 'dark-purple',
+    cssData: darkPurple
+  },
+  'high contrast': {
+    name: 'high contrast',
+    pathName: 'high-contrast',
+    cssData: highContrast
+  },
 };
 
 const ThemeContext = createContext();
@@ -60,7 +76,7 @@ function useTheme() {
 
 function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(themeMappings['dark']);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => { 
     const data = localStorage.getItem('theme');
@@ -77,7 +93,7 @@ function ThemeProvider({ children }) {
   }
 
   function getColor(colorName) {
-    return theme[colorName]
+    return theme.cssData[colorName]
   }
 
   return (
@@ -87,4 +103,4 @@ function ThemeProvider({ children }) {
   );
 }
 
-module.exports = { useTheme, ThemeProvider };
+module.exports = { useTheme, ThemeProvider, themeMappings };

@@ -8,7 +8,7 @@ const {
 } = require('@mui/material');
 const { Link, useLocation } = require('react-router-dom');
 
-const { useTheme } = require('../../theme-context.jsx');
+const { useTheme, themeMappings } = require('../../theme-context.jsx');
 
 const MaterialIcons = require('../icons/material-icons.jsx');
 
@@ -46,6 +46,11 @@ const styleCenterText = {
     verticalAlign: 'middle',
 };
 
+const styleMenuItem = {
+    opacity: '0.7',
+    textTransform: 'capitalize',
+};
+
 const styleNavbarBottom = {
     marginBottom: '2.7rem'
 };
@@ -55,7 +60,8 @@ const styleHome = {
 };
 
 function Navbar(props) { 
-    const { getColor, switchTheme } = useTheme();
+    const { getColor, switchTheme, theme } = useTheme();
+    const { name: themeName } = theme;
 
     const location = useLocation();
 
@@ -69,25 +75,10 @@ function Navbar(props) {
         setAnchorEl(null);
     };
 
-    const handleDarkTheme = () => {
+    function handleTheme(themeName) {
         setAnchorEl(null);
-        switchTheme('dark');
-    };
-
-    const handleLightTheme = () => {
-        setAnchorEl(null);
-        switchTheme('light');
-    };
-
-    const handlePurpleTheme = () => {
-        setAnchorEl(null);
-        switchTheme('dark purple');
-    };
-
-    const handleContrastTheme = () => {
-        setAnchorEl(null);
-        switchTheme('high contrast');
-    };
+        switchTheme(themeName);
+    }
 
     const [listName, setListName] = React.useState('');
     const [listType, setListType] = React.useState('');
@@ -150,10 +141,22 @@ function Navbar(props) {
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <MenuItem onClick={handleDarkTheme}>Dark</MenuItem>
-                    <MenuItem onClick={handlePurpleTheme}>Dark Purple</MenuItem>
-                    <MenuItem onClick={handleLightTheme}>Light</MenuItem>
-                    <MenuItem onClick={handleContrastTheme}>High Contrast</MenuItem>
+                    {Object.values(themeMappings).map((theme) => (
+                        <MenuItem 
+                            key={theme.pathName} 
+                            onClick={() => handleTheme(theme.name)}
+                            style={{
+                                ...styleMenuItem, 
+                                ...themeName === theme.name ? {
+                                    opacity: '1',
+                                    backgroundColor: '#0000001f',
+                                    fontWeight: 'bold',
+                                } : {}
+                            }}
+                        >
+                            {theme.name}
+                        </MenuItem>
+                    ))}
                 </Menu>
             </div>
             <div style={styleNavbarBottom}></div>
